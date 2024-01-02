@@ -1,0 +1,17 @@
+{
+  "name": "neteru-app",
+  "version": "1.0.0",
+  "description": "Oracle System",
+  "main": "app.js",
+  "scripts": {
+    "compile:sass": "node-sass sass/main.scss Neteru-app/css/styles.css -w "
+  },
+  "author": "Clarence Dalton",
+  "license": "ISC",
+  "devDependencies": {
+    "node-sass": "^9.0.0"
+  },
+  "dependencies": {
+    "express": "^4.18.2"
+  }
+}
