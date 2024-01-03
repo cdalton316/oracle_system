@@ -230,10 +230,6 @@ body {
   padding: 2rem;
   gap: 1rem; }
 
-.card__img {
-  border-radius: 3px;
-  background-color: #fff; }
-
 .cards {
   perspective: 100rem;
   cursor: pointer; }
@@ -248,7 +244,6 @@ body {
   transform: rotateY(180deg); }
 
 .card-face {
-  overflow: hidden;
   backface-visibility: hidden;
   position: relative; }
 
