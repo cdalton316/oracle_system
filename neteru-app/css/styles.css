@@ -250,4 +250,7 @@ body {
 .card-face {
   overflow: hidden;
   backface-visibility: hidden;
+  position: relative; }
+
+.card-back {
   position: absolute; }
