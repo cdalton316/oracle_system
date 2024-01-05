@@ -1,155 +1,300 @@
-const cardObjectDefinitions = [
-  { id: 1, imagePath: '/neteru-images/amen-hetep.jpg' },
-  { id: 2, imagePath: '/neteru-images/amen-tu_tchaas.jpg' },
-  { id: 3, imagePath: '/neteru-images/amen-tu_maat.jpg' },
-  { id: 4, imagePath: '/neteru-images/amen-tem_tchaas.jpg' },
-  { id: 5, imagePath: '/neteru-images/amen-tem_maat.jpg' },
-  { id: 6, imagePath: '/neteru-images/ausar-hetep.jpg' },
-  { id: 7, imagePath: '/neteru-images/ausar-tu_tchaas.jpg' },
-  { id: 8, imagePath: '/neteru-images/ausar-tu_maat.jpg' },
-  { id: 9, imagePath: '/neteru-images/ausar-tem_tchaas.jpg' },
-  { id: 10, imagePath: '/neteru-images/ausar-tem_maat.jpg' },
-  { id: 11, imagePath: '/neteru-images/tehuti-hetep.jpg' },
-  { id: 12, imagePath: '/neteru-images/tehuti-tu_tchaas.jpg' },
-  { id: 13, imagePath: '/neteru-images/tehuti-tu_maat.jpg' },
-  { id: 14, imagePath: '/neteru-images/tehuti-tem_tchaas.jpg' },
-  { id: 15, imagePath: '/neteru-images/tehuti-tem_maat.jpg' },
-  { id: 16, imagePath: '/neteru-images/seker-hetep.jpg' },
-  { id: 17, imagePath: '/neteru-images/seker-tu_tchaas.jpg' },
-  { id: 18, imagePath: '/neteru-images/seker-tu_maat.jpg' },
-  { id: 19, imagePath: '/neteru-images/seker-tem_tchaas.jpg' },
-  { id: 20, imagePath: '/neteru-images/seker-tem_maat.jpg' },
-  { id: 21, imagePath: '/neteru-images/card-back.jpg' },
-];
+class AudioController {
+  constructor() {
+    this.bgMusic = new Audio(
+      '/neteru-app/background_music/Siddhi-TheSecretPass.mp3'
+    );
+    this.flipSound = new Audio('/neteru-app/assets/flip.wav');
+    this.querySound = new Audio(
+      '/neteru-app\background_musicLoboLoco-MonkDoor(ID 1832).mp3'
+    );
+    this.queryOversound = new Audio(
+      '/neteru-app\background_musicKetsa-RainMan.mp3'
+    );
+    this.flipSound.volume = 1;
+    this.bgMusic.volume = 0.5;
+    this.bgMusic.loop = true;
+  }
+  startMusic() {
+    this.bgMusic.play();
+  }
+  stopMusic() {
+    this.bgMusic.pause();
+  }
+  flip() {
+    this.flipSound.play();
+  }
+  querySound() {
+    this.querySound.play();
+  }
+  queryOver() {
+    this.stopMusic();
+    this.queryOversound.play();
+  }
+}
+class QuerySelector {
+  constructor(cards) {
+    this.cardsArray = cards;
+    console.log(this.cardsArray);
+    // this.hetepCard = hetep;
+    this.card = document.querySelector('.img');
+    console.log(this.card.id);
+    this.audioController = new AudioController();
+  }
+  startQuery() {
+    this.cardToCheck = null;
+    // this.hetepCard = false;
+    this.queryCards = [];
+    this.busy = true;
+    setTimeout(() => {
+      this.audioController.startMusic();
+      this.shuffleCards();
+      this.busy = false;
+    }, 500);
+    this.hideCards();
+  }
 
-// displayCards(cardObjectDefinitions);
-// const cardBackImgPath = '/neteru-images/card-back.jpg';
+  hideCards(card) {
+    this.cardsArray.forEach((card) => {
+      card.classList.remove('visible');
+      card.classList.remove('complete');
+    });
+  }
+  flipCard(card) {
+    if (this.canFlipCard(card)) {
+      this.audioController.flip();
+      card.classList.add('visible');
+      console.log(card);
+      if (this.cardToCheck) this.checkForHetep(card);
+      else this.cardToCheck = card;
+    }
+  }
+  checkForHetep(card) {
+    if (this.getCardType(card) === hetep) this.hetep(card);
+    else this.notHetep(card);
+    this.cardToCheck = null;
+  }
+  hetep(card) {
+    this.queryCards.push(card);
+    this.audioController.queryOver();
+  }
+  notHetep(card) {
+    this.busy = true;
+    setTimeout(() => {}, 1000);
+    this.busy = false;
+  }
+  getCardType(card) {
+    return card.getElementsByClassName('img')[0].id;
+  }
+  queryOver() {
+    clearInterval();
+  }
+  complete() {
+    clearInterval(this.countDown);
+    this.audioController.queryOver();
+  }
 
-// const cardContainerElem = document.querySelector('.card-container');
-// createCards();
-// function createCards() {
-//   cardObjectDefinitions.forEach((cardItem) => {
-//     createCard(cardItem);
-//     // console.log(cardItem);
-//   });
-// }
+  shuffleCards() {
+    for (let i = this.cardsArray.length - 1; i > 0; i--) {
+      let randIndex = Math.floor(Math.random() * (i + 1));
+      this.cardsArray[randIndex].style.order = i;
+      this.cardsArray[i].style.order = randIndex;
+    }
+  }
 
-// function createCard(cardItem) {
-//   // Create div elements that make up a card
-//   const cardElem = document.createElement('div');
-//   const cardInnerElem = document.createElement('div');
-//   const cardFrontElem = document.createElement('div');
-//   const cardBackElem = document.createElement('div');
+  canFlipCard(card) {
+    return true;
+    // return !this.busy && !this.cardToCheck && !this.hetepCard;
+  }
+}
 
-//   // Create front and back image elements for a card
-//   const cardFrontImg = document.createElement('img');
-//   const cardBackImg = document.createElement('img');
+function ready() {
+  let overlays = Array.from(document.getElementsByClassName('overlay-text'));
 
-//   // Add class and id to card element
-//   addClassToElement(cardElem, 'card');
-//   addIdToElement(cardElem, cardItem.id);
+  let cards = Array.from(document.getElementsByClassName('card__img'));
 
-//   // Add class to inner card element
-//   addClassToElement(cardInnerElem, 'card-inner');
+  let query = new QuerySelector(cards);
+  overlays.forEach((overlay) => {
+    overlay.addEventListener('click', () => {
+      overlay.classList.remove('visible');
+      query.startQuery();
+    });
+  });
+  cards.forEach((card) => {
+    console.log(card);
+    card.addEventListener('click', () => {
+      query.flipCard(card);
+    });
+  });
+}
 
-//   // Add class to front card element
-//   addClassToElement(cardFrontElem, 'card-front');
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', ready());
+} else {
+  ready();
+}
 
-//   // Add class to back card element
-//   addClassToElement(cardBackElem, 'card-back');
+// New QuerySelector
 
-//   // Add src attribute and appropriate value to img element - back of card
-//   addSrcToImageElem(cardBackImg, cardBackImgPath);
-
-//   // Add src attribute and appropriate value to img element - front of card
-//   addSrcToImageElem(cardFrontImg, cardItem.imagePath);
-
-//   // Assign class to back image element of back of card
-//   addClassToElement(cardBackImg, 'card-img');
-//   // Assign class to front image element of front of card
-//   addClassToElement(cardFrontImg, 'card-img');
-
-//   // Add front image element as child element to front card element
-//   addChildElement(cardFrontElem, cardFrontImg);
-//   // Add back image element as child element to back card element
-//   addChildElement(cardBackElem, cardBackImg);
-
-//   // Add front card element as child element to inner card element
-//   addChildElement(cardInnerElem, cardFrontElem);
-//   // Add back card element as child element to inner card element
-//   addChildElement(cardInnerElem, cardBackElem);
-
-//   // Add inner card element as child element to card element
-//   addChildElement(cardElem, cardInnerElem);
-
-//   // Add card element as child element to appropriate grid cell
-//   addCardToGridCell(cardElem);
-// }
-// function createElement(elemType) {
-//   return document.createElement(elemType);
-// }
-
-// function addClassToElement(elem, className) {
-//   elem.classList.add(className);
-// }
-// function addIdToElement(elem, id) {
-//   elem.id = id;
-// }
-
-// function addSrcToImageElem(imgElem, src) {
-//   imgElem.src = src;
-// }
-
-// function addChildElement(parentElem, childElem) {
-//   parentElem.appendChild(childElem);
-// }
-
-// const addCardToGridCell = function (card) {
-//   const cardPositionClassName = mapCardIdToGridCell(card);
-//   const cardPosElem = document.querySelector(cardPositionClassName);
-//   addChildElement(cardPosElem, card);
-// };
-
-// function mapCardIdToGridCell(card) {
-//   if (card.id === 1) {
-//     return '.card-pos-one';
-//   } else if (card.id === 2) {
-//     return '.card-pos-two';
-//   } else if (card.id === 3) {
-//     return '.card-pos-three';
-//   } else if (card.id === 4) {
-//     return '.card-pos-four';
-//   } else if (card.id === 5) {
-//     return '.card-pos-five';
-//   } else if (card.id === 6) {
-//     return '.card-pos-six';
-//   } else if (card.id === 7) {
-//     return '.card-pos-seven';
-//   } else if (card.id === 8) {
-//     return '.card-pos-eight';
-//   } else if (card.id === 9) {
-//     return '.card-pos-nine';
-//   } else if (card.id === 10) {
-//     return '.card-pos-ten';
-//   } else if (card.id === 11) {
-//     return '.card-pos-eleven';
-//   } else if (card.id === 12) {
-//     return '.card-pos-twelve';
-//   } else if (card.id === 13) {
-//     return '.card-pos-thirteen';
-//   } else if (card.id === 14) {
-//     return '.card-pos-fourteen';
-//   } else if (card.id === 15) {
-//     return '.card-pos-fifteen';
-//   } else if (card.id === 16) {
-//     return '.card-pos-sixteen';
-//   } else if (card.id === 17) {
-//     return '.card-pos-seventeen';
-//   } else if (card.id === 18) {
-//     return '.card-pos-eighteen';
-//   } else if (card.id === 19) {
-//     return '.card-pos-nineteen';
-//   } else if (card.id === 20) {
-//     return '.card-pos-twenty';
+// class AudioController {
+//   constructor() {
+//       this.bgMusic = new Audio('https://raw.githubusercontent.com/WebDevSimplified/Mix-Or-Match/master/Assets/Audio/creepy.mp3');
+//       this.flipSound = new Audio('https://raw.githubusercontent.com/WebDevSimplified/Mix-Or-Match/master/Assets/Audio/flip.wav');
+//       this.matchSound = new Audio('https://raw.githubusercontent.com/WebDevSimplified/Mix-Or-Match/master/Assets/Audio/match.wav');
+//       this.victorySound = new Audio('https://raw.githubusercontent.com/WebDevSimplified/Mix-Or-Match/master/Assets/Audio/victory.wav');
+//       this.gameOverSound = new Audio('Assets/Audio/gameOver.wav');
+//       this.bgMusic.volume = 0.5;
+//       this.bgMusic.loop = true;
 //   }
+//   startMusic() {
+//       this.bgMusic.play();
+//   }
+//   stopMusic() {
+//       this.bgMusic.pause();
+//       this.bgMusic.currentTime = 0;
+//   }
+//   flip() {
+//       this.flipSound.play();
+//   }
+//   match() {
+//       this.matchSound.play();
+//   }
+//   victory() {
+//       this.stopMusic();
+//       this.victorySound.play();
+//   }
+//   gameOver() {
+//       this.stopMusic();
+//       this.gameOverSound.play();
+//   }
+// }
+
+// class MixOrMatch {
+//   constructor(totalTime, cards) {
+//       this.cardsArray = cards;
+//       this.totalTime = totalTime;
+//       this.timeRemaining = totalTime;
+//       this.timer = document.getElementById('time-remaining')
+//       this.ticker = document.getElementById('flips');
+//       this.audioController = new AudioController();
+//   }
+
+//   startGame() {
+//       this.totalClicks = 0;
+//       this.timeRemaining = this.totalTime;
+//       this.cardToCheck = null;
+//       this.matchedCards = [];
+//       this.busy = true;
+//       setTimeout(() => {
+//           this.audioController.startMusic();
+//           this.shuffleCards(this.cardsArray);
+//           this.countdown = this.startCountdown();
+//           this.busy = false;
+//       }, 500)
+//       this.hideCards();
+//       this.timer.innerText = this.timeRemaining;
+//       this.ticker.innerText = this.totalClicks;
+//   }
+//   startCountdown() {
+//       return setInterval(() => {
+//           this.timeRemaining--;
+//           this.timer.innerText = this.timeRemaining;
+//           if(this.timeRemaining === 0)
+//               this.gameOver();
+//       }, 1000);
+//   }
+//   gameOver() {
+//       clearInterval(this.countdown);
+//       this.audioController.gameOver();
+//       document.getElementById('game-over-text').classList.add('visible');
+//   }
+//   victory() {
+//       clearInterval(this.countdown);
+//       this.audioController.victory();
+//       document.getElementById('victory-text').classList.add('visible');
+//   }
+//   hideCards() {
+//       this.cardsArray.forEach(card => {
+//           card.classList.remove('visible');
+//           card.classList.remove('matched');
+//       });
+//   }
+//   flipCard(card) {
+//       if(this.canFlipCard(card)) {
+//           this.audioController.flip();
+//           this.totalClicks++;
+//           this.ticker.innerText = this.totalClicks;
+//           card.classList.add('visible');
+
+//           if(this.cardToCheck) {
+//               this.checkForCardMatch(card);
+//           } else {
+//               this.cardToCheck = card;
+//           }
+//       }
+//   }
+//   checkForCardMatch(card) {
+//       if(this.getCardType(card) === this.getCardType(this.cardToCheck))
+//           this.cardMatch(card, this.cardToCheck);
+//       else
+//           this.cardMismatch(card, this.cardToCheck);
+
+//       this.cardToCheck = null;
+//   }
+//   cardMatch(card1, card2) {
+//       this.matchedCards.push(card1);
+//       this.matchedCards.push(card2);
+//       card1.classList.add('matched');
+//       card2.classList.add('matched');
+//       this.audioController.match();
+//       if(this.matchedCards.length === this.cardsArray.length)
+//           this.victory();
+//   }
+//   cardMismatch(card1, card2) {
+//       this.busy = true;
+//       setTimeout(() => {
+//           card1.classList.remove('visible');
+//           card2.classList.remove('visible');
+//           this.busy = false;
+//       }, 1000);
+//   }
+//   shuffleCards(cardsArray) {
+//       for (let i = cardsArray.length - 1; i > 0; i--) {
+//           const randIndex = Math.floor(Math.random() * (i + 1));
+//           [cardsArray[i], cardsArray[randIndex]] = [cardsArray[randIndex], cardsArray[i]];
+//       }
+//       cardsArray = cardsArray.map((card, index) => {
+//           card.style.order = index;
+//       });
+//   }
+//   getCardType(card) {
+//       return card.getElementsByClassName('card-value')[0].src;
+//   }
+//   canFlipCard(card) {
+//       return !this.busy && !this.matchedCards.includes(card) && card !== this.cardToCheck;
+//   }
+// }
+
+// if (document.readyState == 'loading') {
+//   document.addEventListener('DOMContentLoaded', ready)
+// } else {
+//   ready()
+// }
+
+// function ready() {
+//   let overlays = Array.from(document.getElementsByClassName('overlay-text'));
+//   let cards = Array.from(document.getElementsByClassName('card'));
+//   let game = new MixOrMatch(100, cards);
+
+//   overlays.forEach(overlay => {
+//       overlay.addEventListener('click', () => {
+//           overlay.classList.remove('visible');
+//           game.startGame();
+//       });
+//   });
+
+//   cards.forEach(card => {
+//       card.addEventListener('click', () => {
+//           game.flipCard(card);
+//       });
+//   });
 // }
