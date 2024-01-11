@@ -3,7 +3,7 @@ const express = require('express');
 const metuController = require('./../controllers/metuController');
 
 const router = express.Router();
-router.param('id', metuController.checkID);
+// router.param('id', metuController.checkID);
 
 router
   .route('/')
