@@ -1,9 +1,16 @@
 const mongoose = require('mongoose');
 const metuSchema = new mongoose.Schema({
-  name: {
+  metu: {
     type: String,
     required: [true, 'A metu must have a name'],
     unique: true,
+    names: {
+      kamitic: String,
+      canaanite: String,
+      kabalistical: String,
+      yoruba: String,
+      indusKush: String,
+    },
   },
   sphere: {
     type: String,
@@ -14,29 +21,41 @@ const metuSchema = new mongoose.Schema({
   number: { type: Number },
   planet: { type: String },
   gems: { type: String },
-  timeOfYear: { type: String },
-  esotericHerbalism: { type: String },
-  hekau: { type: String },
-  spiritualDirection: { type: String },
-  mundaneDirection: { type: String },
+  info: { type: String },
+  esotericHerbalism: {
+    type: String,
+  
+  baths: { type: String },
+  oils: { type: String },
+  incense: { type: String },
+  trim: true,
+  },
+  hekau: {
+    type: String,
+    spiritual: { type: String },
+    planetary: { type: String },
+    spiritualDirection: { type: String },
+    mundaneDirection: { type: String },
+  },
   personalityPortfolio: {
     type: String,
     personalityTraits: String,
     emotionalTraits: String,
     mentalTraits: String,
+    trim: true,
   },
   socialCorrespondences: {
     type: String,
-    careersFunctions: String,
+    trim: true,
   },
-  spiritualPortfolio: { type: String },
+  spiritualPortfolio: { type: String, trim: true },
   keyPhrases: { type: String },
-  biologicalCorrespondences: { type: String },
-  pathology: { type: String },
-  kamiticTheraputics: { type: String },
-  chineeseMedice: { type: String },
-  spiritualkeynotes: { type: String },
-  spiritualCounsel: { type: String },
+  biologicalCorrespondences: { type: String, trim: true },
+  pathology: { type: String, trim: true },
+  kamiticTheraputics: { type: String, trim: true },
+  chineeseMedice: { type: String, trim: true },
+  spiritualkeynotes: { type: String, trim: true },
+  spiritualCounsel: { type: String, trim: true },
 });
 const Metu = mongoose.model('Metu', metuSchema);
 
