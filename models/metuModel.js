@@ -4,13 +4,13 @@ const metuSchema = new mongoose.Schema({
     type: String,
     required: [true, 'A metu must have a name'],
     unique: true,
-    names: {
-      kamitic: String,
-      canaanite: String,
-      kabalistical: String,
-      yoruba: String,
-      indusKush: String,
-    },
+    names: [
+      { kamitic: String },
+      { canaanite: String },
+      { kabalistical: String },
+      { yoruba: String },
+      { indusKush: String },
+    ],
   },
   sphere: {
     type: String,
@@ -22,28 +22,22 @@ const metuSchema = new mongoose.Schema({
   planet: { type: String },
   gems: { type: String },
   info: { type: String },
-  esotericHerbalism: {
-    type: String,
-  
-  baths: { type: String },
-  oils: { type: String },
-  incense: { type: String },
-  trim: true,
-  },
-  hekau: {
-    type: String,
-    spiritual: { type: String },
-    planetary: { type: String },
-    spiritualDirection: { type: String },
-    mundaneDirection: { type: String },
-  },
-  personalityPortfolio: {
-    type: String,
-    personalityTraits: String,
-    emotionalTraits: String,
-    mentalTraits: String,
-    trim: true,
-  },
+  esotericHerbalism: [
+    { baths: { type: String } },
+    { oils: { type: String } },
+    { incense: { type: String } },
+  ],
+  hekau: [
+    { spiritual: { type: String } },
+    { planetary: { type: String } },
+    { spiritualDirection: { type: String } },
+    { mundaneDirection: { type: String } },
+  ],
+  personalityPortfolio: [
+    { personalityTraits: String },
+    { emotionalTraits: String },
+    { mentalTraits: String },
+  ],
   socialCorrespondences: {
     type: String,
     trim: true,
