@@ -43,21 +43,21 @@ const metuSchema = new mongoose.Schema({
     trim: true,
   },
   spiritualPortfolio: { type: String, trim: true },
-  keyPhrases: { type: String },
-  biologicalCorrespondences: { type: String, trim: true },
-  pathology: { type: String, trim: true },
+
   kamiticTheraputics: { type: String, trim: true },
   chineeseMedice: { type: String, trim: true },
   spiritualkeynotes: { type: String, trim: true },
-  spiritualCounsel: { type: String, trim: true },
   spiritualFunction: {
     type: String,
     trim: true,
-    specialCorrelates: { type: String, trim: true },
-    keyPhrases: { type: String, trim: true },
-    biologicalCorrespondences: { type: String, trim: true },
-    spritualCounsel: { type: String, trim: true },
   },
+  specialCorrelates: { type: String, trim: true },
+  keyPhrases: { type: String, trim: true },
+  biologicalCorrespondences: [
+    { physiology: { type: String, trim: true } },
+    { pathology: { type: String, trim: true } },
+  ],
+  spritualCounsel: { type: String, trim: true },
 });
 const Metu = mongoose.model('Metu', metuSchema);
 
