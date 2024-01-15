@@ -6,8 +6,23 @@ const Metu = require('./../models/metuModel');
 
 exports.getAllMetutu = async (req, res) => {
   try {
-    console.log(req.query);
-    const metutu = await Metu.find();
+    //BUILD QUERY
+    const queryObj = { ...req.query };
+    const excludeFields = ['page', 'sort', 'limit', 'fields'];
+    excludeFields.forEach((el) => delete queryObj[el]);
+
+    let queryStr = JSON.stringify(queryObj);
+    queryStr = queryStr.replace(/\b(gte|gt|lte|lt)\b/g, (match) => {
+      `$${match}`;
+    });
+    console.log(JSON.parse(queryStr));
+
+    let query = Metu.find(JSON.parse(queryStr));
+    if (req.query.sort) {
+      query = query.sort(req.query.sort);
+    }
+    // EXECUTE QUERY
+    const metutu = await query;
     res.status(200).json({
       status: 'success',
       results: metutu.length,
