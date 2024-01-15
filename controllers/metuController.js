@@ -6,6 +6,7 @@ const Metu = require('./../models/metuModel');
 
 exports.getAllMetutu = async (req, res) => {
   try {
+    console.log(req.query);
     const metutu = await Metu.find();
     res.status(200).json({
       status: 'success',
