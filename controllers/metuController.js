@@ -3,26 +3,17 @@ const Metu = require('./../models/metuModel');
 // const metutu = JSON.parse(
 //   fs.readFileSync(`${__dirname}/../neteru-app/metutu/metutu.json`),
 // );
+const APIFeatures = require('./../utils/apiFeatures');
 
 exports.getAllMetutu = async (req, res) => {
   try {
-    //BUILD QUERY
-    const queryObj = { ...req.query };
-    const excludeFields = ['page', 'sort', 'limit', 'fields'];
-    excludeFields.forEach((el) => delete queryObj[el]);
-
-    let queryStr = JSON.stringify(queryObj);
-    queryStr = queryStr.replace(/\b(gte|gt|lte|lt)\b/g, (match) => {
-      `$${match}`;
-    });
-    console.log(JSON.parse(queryStr));
-
-    let query = Metu.find(JSON.parse(queryStr));
-    if (req.query.sort) {
-      query = query.sort(req.query.sort);
-    }
     // EXECUTE QUERY
-    const metutu = await query;
+    const features = new APIFeatures(Metu.find(), req.query)
+      .filter()
+      .sort()
+      .limitFields()
+      .pagination();
+    const metutu = await features.query;
     res.status(200).json({
       status: 'success',
       results: metutu.length,
@@ -106,3 +97,14 @@ exports.deleteMetu = async (req, res) => {
     });
   }
 };
+
+// exports.getMetuStats = async (req, res) => {
+//   try {
+//     const stats = Metu.aggregate([]);
+//   } catch (err) {
+//     res.status(404).json({
+//       status: 'fail',
+//       message: err,
+//     });
+//   }
+// };
