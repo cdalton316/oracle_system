@@ -1,14 +1,14 @@
 class AudioController {
   constructor() {
     this.bgMusic = new Audio(
-      '/neteru-app/background_music/Siddhi-TheSecretPass.mp3'
+      '/neteru-app/background_music/Siddhi-TheSecretPass.mp3',
     );
     this.flipSound = new Audio('/neteru-app/assets/flip.wav');
     this.querySound = new Audio(
-      '/neteru-app\background_musicLoboLoco-MonkDoor(ID 1832).mp3'
+      '/neteru-app\background_musicLoboLoco-MonkDoor(ID 1832).mp3',
     );
     this.queryOversound = new Audio(
-      '/neteru-app\background_musicKetsa-RainMan.mp3'
+      '/neteru-app\background_musicKetsa-RainMan.mp3',
     );
     this.flipSound.volume = 1;
     this.bgMusic.volume = 0.5;
@@ -69,6 +69,7 @@ class QuerySelector {
     }
   }
   checkForHetep(card) {
+    console.log(this.getCardType(card));
     if (this.getCardType(card) === hetep) this.hetep(card);
     else this.notHetep(card);
     this.cardToCheck = null;
@@ -83,8 +84,9 @@ class QuerySelector {
     this.busy = false;
   }
   getCardType(card) {
-    return card.getElementsByClassName('img')[0].id;
+    return this.card.getElementsByClassName('card-value')[0].id;
   }
+
   queryOver() {
     clearInterval();
   }
