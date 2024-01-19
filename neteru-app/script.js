@@ -5,10 +5,10 @@ class AudioController {
     );
     this.flipSound = new Audio('/neteru-app/assets/flip.wav');
     this.querySound = new Audio(
-      '/neteru-app\background_musicLoboLoco-MonkDoor(ID 1832).mp3',
+      '/neteru-app/background_music/LoboLoco-MonkDoor(ID 1832).mp3',
     );
-    this.queryOversound = new Audio(
-      '/neteru-app\background_musicKetsa-RainMan.mp3',
+    this.queryOverSound = new Audio(
+      '/neteru-app/background_music/Ketsa-RainMan.mp3',
     );
     this.flipSound.volume = 1;
     this.bgMusic.volume = 0.5;
@@ -28,7 +28,7 @@ class AudioController {
   }
   queryOver() {
     this.stopMusic();
-    this.queryOversound.play();
+    this.queryOverSound.play();
   }
 }
 class QuerySelector {
@@ -37,7 +37,7 @@ class QuerySelector {
     console.log(this.cardsArray);
     // this.hetepCard = hetep;
     this.card = document.querySelector('.img');
-    console.log(this.card.id);
+    console.log(this.card);
     this.audioController = new AudioController();
   }
   startQuery() {
@@ -68,15 +68,18 @@ class QuerySelector {
       else this.cardToCheck = card;
     }
   }
+
   checkForHetep(card) {
-    console.log(this.getCardType(card));
-    if (this.getCardType(card) === hetep) this.hetep(card);
+    // const cardValue = document.querySelector('.card-value');
+    // console.log(cardValue.getAttribute('id'));
+    if (this.getCardType(card) === 'hetep') this.hetep(card);
     else this.notHetep(card);
     this.cardToCheck = null;
   }
   hetep(card) {
     this.queryCards.push(card);
     this.audioController.queryOver();
+    this.busy = true;
   }
   notHetep(card) {
     this.busy = true;
@@ -84,7 +87,7 @@ class QuerySelector {
     this.busy = false;
   }
   getCardType(card) {
-    return this.card.getElementsByClassName('card-value')[0].id;
+    return card.getElementsByClassName('card-value')[0].id;
   }
 
   queryOver() {
@@ -104,8 +107,14 @@ class QuerySelector {
   }
 
   canFlipCard(card) {
-    return true;
-    // return !this.busy && !this.cardToCheck && !this.hetepCard;
+    // return true;
+    return (
+      !this.busy &&
+      !this.hetepCard &&
+      card != this.cardToCheck &&
+      !this.queryCards.includes(card)
+    );
+    //
   }
 }
 
