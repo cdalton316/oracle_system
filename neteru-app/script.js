@@ -1,3 +1,4 @@
+const pickedCards = [];
 class AudioController {
   constructor() {
     this.bgMusic = new Audio(
@@ -40,9 +41,11 @@ class QuerySelector {
     console.log(this.card);
     this.audioController = new AudioController();
   }
+
   startQuery() {
     this.cardToCheck = null;
     // this.hetepCard = false;
+    this.cardsToFlip = 2;
     this.queryCards = [];
     this.busy = true;
     setTimeout(() => {
@@ -61,12 +64,20 @@ class QuerySelector {
   }
   flipCard(card) {
     if (this.canFlipCard(card)) {
+      card.addEventListener('click', () => {
+        console.log(card.children[1].children[0].id);
+      });
       this.audioController.flip();
+      this.cardsToFlip--;
+
       card.classList.add('visible');
-      console.log(card);
-      if (this.cardToCheck) this.checkForHetep(card);
-      else this.cardToCheck = card;
+      // this.queryCards.push(card);
+
+      if (this.cardToCheck) {
+        this.checkForHetep(card);
+      } else this.cardToCheck = card;
     }
+    console.log(this.cardsToFlip);
   }
 
   checkForHetep(card) {
@@ -107,12 +118,17 @@ class QuerySelector {
   }
 
   canFlipCard(card) {
+    console.log(this.cardsToFlip);
+
     // return true;
     return (
+      !this.cardsToFlip == 0 &&
       !this.busy &&
       !this.hetepCard &&
       card != this.cardToCheck &&
       !this.queryCards.includes(card)
+
+      // !this.getCardType(card) === 'hetep'
     );
     //
   }
@@ -132,8 +148,13 @@ function ready() {
   });
   cards.forEach((card) => {
     console.log(card);
+    console.log(card.children[1].children[0].id);
     card.addEventListener('click', () => {
       query.flipCard(card);
+      cardType = card.children[1].children[0].id;
+      if (pickedCards.length < 2) pickedCards.push(cardType);
+      console.log(cardType);
+      console.log(pickedCards);
     });
   });
 }
