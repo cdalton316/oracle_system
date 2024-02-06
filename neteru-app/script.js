@@ -64,14 +64,20 @@ class QuerySelector {
   }
   flipCard(card) {
     if (this.canFlipCard(card)) {
-      card.addEventListener('click', () => {
-        console.log(card.children[1].children[0].id);
-      });
+      console.log(card.children[1].children[0].id);
+
       this.audioController.flip();
       this.cardsToFlip--;
 
       card.classList.add('visible');
+      this.busy = true;
       // this.queryCards.push(card);
+      if (card.children[1].children[0].id !== 'hetep') this.busy = false;
+      setTimeout(() => {
+        this.shuffleCards();
+
+        this.hideCards();
+      }, 500);
 
       if (this.cardToCheck) {
         this.checkForHetep(card);
@@ -89,6 +95,7 @@ class QuerySelector {
   }
   hetep(card) {
     this.queryCards.push(card);
+    pickedCards.push(card.children[1].children[0].id);
     this.audioController.queryOver();
     this.busy = true;
   }
@@ -119,6 +126,7 @@ class QuerySelector {
 
   canFlipCard(card) {
     console.log(this.cardsToFlip);
+    console.log(card.children[1].children[0].id);
 
     // return true;
     return (
@@ -152,7 +160,10 @@ function ready() {
     card.addEventListener('click', () => {
       query.flipCard(card);
       cardType = card.children[1].children[0].id;
-      if (pickedCards.length < 2) pickedCards.push(cardType);
+      console.log(pickedCards.length);
+
+      if (cardType == 'hetep' && pickedCards.length < 1)
+        pickedCards.push(cardType);
       console.log(cardType);
       console.log(pickedCards);
     });
