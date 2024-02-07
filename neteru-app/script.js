@@ -95,9 +95,17 @@ class QuerySelector {
   }
   hetep(card) {
     this.queryCards.push(card);
+    console.log(card.children[1].children[0].id);
     pickedCards.push(card.children[1].children[0].id);
     this.audioController.queryOver();
     this.busy = true;
+    this.overlay();
+  }
+  overlay(card) {
+    const overlay = document.querySelector('.overlay-text');
+    console.log(overlay);
+
+    overlay.classList.add('visible');
   }
   notHetep(card) {
     this.busy = true;
@@ -130,7 +138,7 @@ class QuerySelector {
 
     // return true;
     return (
-      !this.cardsToFlip == 0 &&
+      this.cardsToFlip > 0 &&
       !this.busy &&
       !this.hetepCard &&
       card != this.cardToCheck &&
@@ -154,6 +162,7 @@ function ready() {
       query.startQuery();
     });
   });
+
   cards.forEach((card) => {
     console.log(card);
     console.log(card.children[1].children[0].id);
@@ -162,9 +171,11 @@ function ready() {
       cardType = card.children[1].children[0].id;
       console.log(pickedCards.length);
 
-      if (cardType == 'hetep' && pickedCards.length < 1)
+      if (pickedCards.length < 2 && cardType !== 'hetep')
         pickedCards.push(cardType);
-      console.log(cardType);
+
+      if (cardType === 'hetep' && pickedCards.length < 1) query.hetep(card);
+      console.log(card);
       console.log(pickedCards);
     });
   });
