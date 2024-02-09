@@ -100,7 +100,20 @@ exports.deleteMetu = async (req, res) => {
 
 // exports.getMetuStats = async (req, res) => {
 //   try {
-//     const stats = Metu.aggregate([]);
+//     const stats = await Metu.aggregate([
+//       $match:{
+
+//       },
+//       $group:{},
+//     ]);
+
+//       res.status(200).json({
+//         status: 'success',
+//         data: {
+//           stats
+//         }
+//       });
+
 //   } catch (err) {
 //     res.status(404).json({
 //       status: 'fail',

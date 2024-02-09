@@ -98,8 +98,8 @@ class QuerySelector {
     console.log(card.children[1].children[0].id);
     pickedCards.push(card.children[1].children[0].id);
     this.audioController.queryOver();
-    this.busy = true;
     this.overlay();
+    this.busy = true;
   }
   overlay(card) {
     const overlay = document.querySelector('.overlay-text');
@@ -173,6 +173,8 @@ function ready() {
 
       if (pickedCards.length < 2 && cardType !== 'hetep')
         pickedCards.push(cardType);
+
+      if (pickedCards.length === 2 && cardType !== 'hetep') query.hetep(card);
 
       if (cardType === 'hetep' && pickedCards.length < 1) query.hetep(card);
       console.log(card);
