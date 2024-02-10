@@ -1,4 +1,6 @@
 const mongoose = require('mongoose');
+const slugify = require('slugify');
+const validator = require('validator');
 const metuSchema = new mongoose.Schema({
   metu: {
     type: String,

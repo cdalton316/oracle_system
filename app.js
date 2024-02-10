@@ -19,5 +19,11 @@ app.use(express.static(`${__dirname}/neteru-app`));
 
 app.use('/api/v1/metutu', metuRouter);
 app.use('/api/v1/users', userRouter);
-
+app.all('*', (req, res) => {
+  console.log(req.originalUrl);
+  res.status(404).json({
+    status: 'fail',
+    message: `Can't find ${req.originalUrl} on this server!`,
+  });
+});
 module.exports = app;
