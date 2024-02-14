@@ -1,0 +1,22 @@
+.main-nav-list {
+  list-style: none;
+  display: flex;
+  justify-content: flex-end;
+}
+.main-nav-link:link,
+.main-nav-link:visited {
+  display: inline-block;
+  text-decoration: none;
+  color: #d51919;
+  font-weight: 500;
+  font-size: 1.8rem;
+  gap: 20px;
+}
+li {
+  display: flex;
+  gap: 3.6rem;
+}
+
+html {
+  background-color: aqua;
+}
