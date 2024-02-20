@@ -3,7 +3,7 @@ const catchAsync = require('../utils/catchAsync');
 exports.getOverview = catchAsync(async (req, res, next) => {
   // 1) Get metu data from collection
   const metutu = await Metu.find();
-  console.log(metutu);
+
   // Build template
 
   // Render that template using metu data from 1
@@ -17,10 +17,11 @@ exports.getOverview = catchAsync(async (req, res, next) => {
 exports.getMetu = catchAsync(async (req, res) => {
   const metu = await Metu.findOne({
     slug: req.params.slug,
-  }).populate({
-    path: 'reviews',
-    fields: 'review rating user',
   });
+  // .populate({
+  //   path: 'reviews',
+  //   fields: 'review rating user',
+  // });
   res.status(200).render('metu', {
     title: 'Heru Metu',
     metu,

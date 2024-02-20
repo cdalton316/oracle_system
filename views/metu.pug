@@ -8,16 +8,16 @@ block content
 
     .heading-box
       h1.heading-primary
-        span Heru
+        span= `${metu.name}`
       .heading-box__group
         .heading-box__detail
           svg.heading-box__icon
             use(xlink:href='/img/icons.svg#icon-clock')
-          span.heading-box__text= `Heru`
+          span.heading-box__text= `${metu.name}`
         .heading-box__detail
           svg.heading-box__icon
             use(xlink:href='/img/icons.svg#icon-map-pin')
-          span.heading-box__text Las Vegas, USA
+          span.heading-box__text= `${metu.planet}`
 
   section.section-description
     .overview-box

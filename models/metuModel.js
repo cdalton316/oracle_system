@@ -76,9 +76,9 @@ metuSchema.pre(/^find/, function (next) {
   this.find({ hiddenMetu: { $ne: true } });
   next();
 });
-metuSchema.post(/^find/,function(docs,next{
-  next()
-}))
+metuSchema.post(/^find/, function (docs, next) {
+  next();
+});
 const Metu = mongoose.model('Metu', metuSchema);
 
 module.exports = Metu;
