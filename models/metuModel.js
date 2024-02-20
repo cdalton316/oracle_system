@@ -14,6 +14,7 @@ const metuSchema = new mongoose.Schema({
       { indusKush: String },
     ],
   },
+  slug: String,
   sphere: {
     type: String,
   },
@@ -60,7 +61,24 @@ const metuSchema = new mongoose.Schema({
     { pathology: { type: String, trim: true } },
   ],
   spritualCounsel: { type: String, trim: true },
+  hiddenMetu: {
+    type: Boolean,
+    default: false,
+  },
 });
+
+metuSchema.pre('save', function (next) {
+  this.slug = slugify(this.name, { lower: true });
+  next();
+});
+
+metuSchema.pre(/^find/, function (next) {
+  this.find({ hiddenMetu: { $ne: true } });
+  next();
+});
+metuSchema.post(/^find/,function(docs,next{
+  next()
+}))
 const Metu = mongoose.model('Metu', metuSchema);
 
 module.exports = Metu;
